@@ -2,6 +2,7 @@
 <html>
 <head>
   <title>Lenny Growth Assistant</title>
+
   <style>
     body {
       font-family: Arial;
@@ -55,12 +56,13 @@
       white-space: pre-wrap;
     }
   </style>
-  <p style="color:gray;font-size:12px;">
-Grounded answers from Lenny's Podcast transcripts
-</p>
 </head>
 
 <body>
+
+<p style="color:gray;font-size:12px;">
+  Grounded answers from Lenny's Podcast transcripts
+</p>
 
 <div class="box">
   <h2>🚀 Lenny Growth Assistant</h2>
@@ -76,6 +78,10 @@ Grounded answers from Lenny's Podcast transcripts
 async function send(){
   let q = document.getElementById("q").value;
 
+  if (!q) return;
+
+  document.getElementById("res").innerText = "⏳ Thinking...";
+
   try {
     let res = await fetch("http://127.0.0.1:8000/api/chat", {
       method: "POST",
@@ -89,9 +95,16 @@ async function send(){
       data.answer || data.artifact;
 
   } catch(err){
-    document.getElementById("res").innerText = "Error connecting to backend";
+    document.getElementById("res").innerText = "❌ Error connecting to backend";
   }
 }
+
+// Enter key support
+document.getElementById("q").addEventListener("keypress", function(e) {
+  if (e.key === "Enter") {
+    send();
+  }
+});
 </script>
 
 </body>

@@ -3,11 +3,15 @@ from pydantic import BaseModel
 from typing import List
 import uuid
 from datetime import datetime
+import logging
 
-# ✅ CORS FIX
+# ✅ CORS
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(title="Lenny Growth Assistant")
+
+# ✅ Logging (professional touch)
+logging.basicConfig(level=logging.INFO)
 
 # ✅ Enable frontend connection
 app.add_middleware(
@@ -58,15 +62,17 @@ transcripts = [
     }
 ]
 
-
 # ---------------------------
-# Retrieval Logic (RAG-style)
+# Retrieval Logic (Improved)
 # ---------------------------
 def retrieve_context(query: str) -> List[dict]:
     results = []
+    keywords = [w.lower() for w in query.split() if len(w) > 3]
+
     for t in transcripts:
-        if any(word.lower() in t["text"].lower() for word in query.split()):
+        if any(word in t["text"].lower() for word in keywords):
             results.append(t)
+
     return results
 
 
@@ -76,6 +82,7 @@ def retrieve_context(query: str) -> List[dict]:
 @app.get("/")
 def home():
     return {"msg": "Running"}
+
 
 @app.get("/health")
 def health():
@@ -102,6 +109,8 @@ def create_session():
 @app.post("/api/chat")
 def chat(req: ChatRequest):
 
+    logging.info(f"Incoming query: {req.message}")
+
     # Create session if not exists
     if not req.session_id:
         req.session_id = str(uuid.uuid4())
@@ -125,14 +134,14 @@ def chat(req: ChatRequest):
             "answer": "I do not have sufficient information in Lenny's podcast transcripts to answer this."
         }
 
-    # Format context with citation
+    # Format context
     formatted_context = "\n\n".join([
         f"[Episode: {c['episode']} | Guest: {c['guest']}]\n{c['text']}"
         for c in context
     ])
 
     # ---------------------------
-    # Artifact Mode (Ship30 Style)
+    # Article Mode
     # ---------------------------
     if "article" in req.message.lower():
 

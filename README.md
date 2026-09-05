@@ -71,3 +71,4 @@ Supports grounded responses with citation-style context.
 - Integrate Ollama / OpenAI
 - Improve UI with React
 - Add authentication
+
