@@ -51,3 +51,23 @@ It provides grounded answers, generates structured long-form content, and simula
 pip install fastapi uvicorn
 
 Supports grounded responses with citation-style context.
+
+## Architecture
+
+- FastAPI backend
+- In-memory session handling
+- Simple RAG retrieval (keyword-based)
+- HTML frontend with API integration
+
+## Limitations
+
+- No PostgreSQL (used in-memory due to time constraint)
+- No real LLM (mock responses)
+- Basic retrieval (no embeddings)
+
+## Future Improvements
+
+- Add PostgreSQL + pgvector
+- Integrate Ollama / OpenAI
+- Improve UI with React
+- Add authentication
