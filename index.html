@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Lenny Growth Assistant</title>
+  <style>
+    body {
+      font-family: Arial;
+      background: #f5f7fb;
+      text-align: center;
+      padding: 40px;
+    }
+
+    h2 {
+      color: #333;
+    }
+
+    .box {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      width: 500px;
+      margin: auto;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    input {
+      width: 80%;
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      padding: 10px 15px;
+      margin-top: 10px;
+      background: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #45a049;
+    }
+
+    pre {
+      text-align: left;
+      background: #111;
+      color: #0f0;
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 20px;
+      white-space: pre-wrap;
+    }
+  </style>
+  <p style="color:gray;font-size:12px;">
+Grounded answers from Lenny's Podcast transcripts
+</p>
+</head>
+
+<body>
+
+<div class="box">
+  <h2>🚀 Lenny Growth Assistant</h2>
+
+  <input id="q" placeholder="Ask growth question..." />
+  <br>
+  <button onclick="send()">Ask</button>
+
+  <pre id="res"></pre>
+</div>
+
+<script>
+async function send(){
+  let q = document.getElementById("q").value;
+
+  try {
+    let res = await fetch("http://127.0.0.1:8000/api/chat", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({message: q})
+    });
+
+    let data = await res.json();
+
+    document.getElementById("res").innerText =
+      data.answer || data.artifact;
+
+  } catch(err){
+    document.getElementById("res").innerText = "Error connecting to backend";
+  }
+}
+</script>
+
+</body>
+</html>
